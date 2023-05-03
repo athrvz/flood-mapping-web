@@ -1,0 +1,5 @@
+venv
+
+backend/model/EffUnetB0_512_3.h5
+
+backend/model/EffUnetB0_512_3_weak_1.h5
