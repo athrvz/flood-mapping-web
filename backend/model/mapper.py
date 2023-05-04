@@ -39,6 +39,7 @@ def getX():
     return X 
 
 def plot_val(models, plot=True):
+    print('Mapping...')
     cnt = 1
     X = getX()
     # mask = process_mask(gdal.Open('train_labels/{}.tif'.format(path)).ReadAsArray())
@@ -56,16 +57,16 @@ def plot_val(models, plot=True):
     pred_thresh = pred_thresh.astype(int)
     
     if plot:
-        _, ax = plt.subplots(1, 4, figsize=(16, 4))
+        _, ax = plt.subplots(1, 3, figsize=(16, 4))
     
         ax[0].imshow(X[:, :, 0])
         ax[0].set_title('vh')
         # ax[1].imshow(mask)
-        ax[1].set_title('gt')
-        ax[2].imshow(pred)
-        ax[2].set_title('pred')
-        ax[3].imshow(pred_thresh)
-        ax[3].set_title('thresh_pred')
+        # ax[1].set_title('gt')
+        ax[1].imshow(pred)
+        ax[1].set_title('pred')
+        ax[2].imshow(pred_thresh)
+        ax[2].set_title('thresh_pred')
         # if mask.sum() == 0 and pred_thresh.sum() == 0:
         #     iou = 1
         # else:
@@ -73,7 +74,7 @@ def plot_val(models, plot=True):
         #     union = np.logical_or(mask, pred_thresh).sum()
         #     iou = intersection / union
         # plt.suptitle(iou)
-        plt.savefig('.\\uploads\\' + 'results{}.png'.format(cnt))
+        plt.savefig('.\\uploads\\' + 'results.png')
         cnt += 1
         # plt.show()
     

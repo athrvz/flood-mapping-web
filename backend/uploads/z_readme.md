@@ -1,1 +1,0 @@
-The images from the POST req are uploaded here
