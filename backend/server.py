@@ -2,7 +2,13 @@ from flask import Flask, request, make_response, jsonify, send_file
 import os 
 import subprocess
 
+from flask_cors import CORS, cross_origin
+
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16 MB limit
 app.config['UPLOAD_FOLDER'] = "./uploads"
 

@@ -15,7 +15,7 @@ export default function Uploader() {
     data.append("file", file);
 
     axios
-      .post("http://localhost:3000/upload_files", data)
+      .post("http://localhost:5000/upload", data)
       .then((resp) => resp.json())
       .then((data) => {
         if (data.errors) {
