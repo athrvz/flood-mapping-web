@@ -10,13 +10,32 @@ export default function Uploader() {
     setFileList(Array.prototype.slice.call(e.target.files));
   };
 
+  const handleGetResults = async (e) => {
+    e.preventDefault();
+    axios({
+      method: "get",
+      url: "http://localhost:5000/results",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data.errors) {
+          alert(data.errors);
+        } else {
+          console.log(data);
+        }
+      });
+  };
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
     if (fileList.length === 0) return;
 
     const data = new FormData();
     Object.keys(fileList).forEach((file, i) => {
-      data.append(`image-${i + 1}`, fileList[i], fileList[i].name);
+      data.append(`image${i + 1}`, fileList[i], fileList[i].name);
     });
 
     // files.forEach((file, i) => {
@@ -72,7 +91,7 @@ export default function Uploader() {
         <button className="button" type="submit" onClick={onSubmitHandler}>
           Upload
         </button>
-        <button className="button" style={{ margin: "auto" }}>
+        <button className="button" style={{ margin: "auto" }} onClick={handleGetResults}>
           Get Results
         </button>
       </div>
