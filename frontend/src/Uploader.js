@@ -19,20 +19,8 @@ export default function Uploader() {
       data.append(`image-${i + 1}`, fileList[i], fileList[i].name);
     });
 
-    // files.forEach((file, i) => {
-    //   data.append(`files-${i}`, file, file.name);
-    // });
-    // data.append("file", files);
-    // console.log(...data);
-
-    axios({
-      method: "post",
-      url: "http://localhost:5000/upload",
-      data: data,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    axios
+      .post("http://localhost:5000/upload", data)
       .then((resp) => resp.json())
       .then((data) => {
         if (data.errors) {
@@ -42,10 +30,26 @@ export default function Uploader() {
         }
       });
 
-    // axios
-    //   .post("http://localhost:5000/upload", data)
-
     setFileList(null);
+  };
+
+  const getResult = (e) => {
+    e.preventDefault();
+
+    // axios
+    //   .get("http://localhost:5000/results").then(response => {
+    //     console.log(response.data);
+    //     console.log(response.data == null)
+    //     console.log(base64.encode(response.data))
+    // }).catch(err => console.log(err));
+
+    axios
+      .get("http://localhost:5000/results", {
+        responseType: "arraybuffer",
+      })
+      .then((response) =>
+        Buffer.from(response.data, "binary").toString("base64")
+      );
   };
 
   return (
@@ -65,14 +69,19 @@ export default function Uploader() {
           </label>
         </div>
         <div className="img-container">
-          <label>{fileList ? fileList.name : "Image Name"}</label>
+          <label>
+            {fileList &&
+              fileList.map((file, index) => {
+                return <p>image-{index + 1 + " : " + file.name}</p>;
+              })}
+          </label>
         </div>
       </form>
       <div className="results">
         <button className="button" type="submit" onClick={onSubmitHandler}>
           Upload
         </button>
-        <button className="button" style={{ margin: "auto" }}>
+        <button className="button" onClick={getResult}>
           Get Results
         </button>
       </div>
