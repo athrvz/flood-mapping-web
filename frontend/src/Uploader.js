@@ -10,32 +10,13 @@ export default function Uploader() {
     setFileList(Array.prototype.slice.call(e.target.files));
   };
 
-  const handleGetResults = async (e) => {
-    e.preventDefault();
-    axios({
-      method: "get",
-      url: "http://localhost:5000/results",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.errors) {
-          alert(data.errors);
-        } else {
-          console.log(data);
-        }
-      });
-  };
-
   const onSubmitHandler = (e) => {
     e.preventDefault();
     if (fileList.length === 0) return;
 
     const data = new FormData();
     Object.keys(fileList).forEach((file, i) => {
-      data.append(`image${i + 1}`, fileList[i], fileList[i].name);
+      data.append(`image-${i + 1}`, fileList[i], fileList[i].name);
     });
 
     // files.forEach((file, i) => {
@@ -60,11 +41,40 @@ export default function Uploader() {
           console.log(data);
         }
       });
+  };
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    if (fileList.length === 0) return;
+
+    const data = new FormData();
+    Object.keys(fileList).forEach((file, i) => {
+      data.append(`image${i + 1}`, fileList[i], fileList[i].name);
+    });
 
     // axios
     //   .post("http://localhost:5000/upload", data)
 
     setFileList(null);
+  };
+
+  const getResult = (e) => {
+    e.preventDefault();
+
+    // axios
+    //   .get("http://localhost:5000/results").then(response => {
+    //     console.log(response.data);
+    //     console.log(response.data == null)
+    //     console.log(base64.encode(response.data))
+    // }).catch(err => console.log(err));
+
+    axios
+      .get("http://localhost:5000/results", {
+        responseType: "arraybuffer",
+      })
+      .then((response) =>
+        Buffer.from(response.data, "binary").toString("base64")
+      );
   };
 
   return (
@@ -84,7 +94,12 @@ export default function Uploader() {
           </label>
         </div>
         <div className="img-container">
-          <label>{fileList ? fileList.name : "Image Name"}</label>
+          <label>
+            {fileList &&
+              fileList.map((file, index) => {
+                return <p>image-{index + 1 + " : " + file.name}</p>;
+              })}
+          </label>
         </div>
       </form>
       <div className="results">
