@@ -16,7 +16,7 @@ export default function Uploader() {
 
     const data = new FormData();
     Object.keys(fileList).forEach((file, i) => {
-      data.append(`image-${i + 1}`, fileList[i], fileList[i].name);
+      data.append(`image${i + 1}`, fileList[i], fileList[i].name);
     });
 
     // files.forEach((file, i) => {
@@ -41,21 +41,6 @@ export default function Uploader() {
           console.log(data);
         }
       });
-  };
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    if (fileList.length === 0) return;
-
-    const data = new FormData();
-    Object.keys(fileList).forEach((file, i) => {
-      data.append(`image${i + 1}`, fileList[i], fileList[i].name);
-    });
-
-    // axios
-    //   .post("http://localhost:5000/upload", data)
-
-    setFileList(null);
   };
 
   const getResult = (e) => {
@@ -106,7 +91,7 @@ export default function Uploader() {
         <button className="button" type="submit" onClick={onSubmitHandler}>
           Upload
         </button>
-        <button className="button" style={{ margin: "auto" }} onClick={handleGetResults}>
+        <button className="button" style={{ margin: "auto" }} onClick={getResult}>
           Get Results
         </button>
       </div>
