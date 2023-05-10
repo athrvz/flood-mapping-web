@@ -3,19 +3,36 @@ import "./App.css";
 import axios from "axios";
 
 export default function Uploader() {
-  const [file, setFile] = useState(null);
+  const [fileList, setFileList] = useState([]);
 
   const onImageChange = (e) => {
-    setFile(e.target.files[0]);
+    // setFileList(e.target.files);
+    setFileList(Array.prototype.slice.call(e.target.files));
   };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append("file", file);
+    if (fileList.length === 0) return;
 
-    axios
-      .post("http://localhost:5000/upload", data)
+    const data = new FormData();
+    Object.keys(fileList).forEach((file, i) => {
+      data.append(`image-${i + 1}`, fileList[i], fileList[i].name);
+    });
+
+    // files.forEach((file, i) => {
+    //   data.append(`files-${i}`, file, file.name);
+    // });
+    // data.append("file", files);
+    // console.log(...data);
+
+    axios({
+      method: "post",
+      url: "http://localhost:5000/upload",
+      data: data,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
       .then((resp) => resp.json())
       .then((data) => {
         if (data.errors) {
@@ -25,7 +42,10 @@ export default function Uploader() {
         }
       });
 
-    setFile(null);
+    // axios
+    //   .post("http://localhost:5000/upload", data)
+
+    setFileList(null);
   };
 
   return (
@@ -35,6 +55,7 @@ export default function Uploader() {
           <input
             type="file"
             id="files"
+            multiple
             accept="image/*"
             className="hidden"
             onChange={onImageChange}
@@ -44,7 +65,7 @@ export default function Uploader() {
           </label>
         </div>
         <div className="img-container">
-          <label>{file ? file.name : "Image Name"}</label>
+          <label>{fileList ? fileList.name : "Image Name"}</label>
         </div>
       </form>
       <div className="results">
