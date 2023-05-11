@@ -54,7 +54,5 @@ def upload_img():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {"tif"} 
 
-
-
 if __name__ == "__main__":
     app.run()
