@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import "./App.css";
+import LoadingSpinner from "./spinner";
 import axios from "axios";
+import ImageContainer from "./ImageContainer";
+
+let data;
 
 export default function Uploader() {
   const [fileList, setFileList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onImageChange = (e) => {
-    // setFileList(e.target.files);
     setFileList(Array.prototype.slice.call(e.target.files));
   };
 
@@ -18,12 +22,6 @@ export default function Uploader() {
     Object.keys(fileList).forEach((file, i) => {
       data.append(`image${i + 1}`, fileList[i], fileList[i].name);
     });
-
-    // files.forEach((file, i) => {
-    //   data.append(`files-${i}`, file, file.name);
-    // });
-    // data.append("file", files);
-    // console.log(...data);
 
     axios({
       method: "post",
@@ -45,6 +43,18 @@ export default function Uploader() {
 
   const getResult = (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    axios
+      .get("http://localhost:5000/results", {
+        responseType: "arraybuffer",
+      })
+      .then((response) => {
+        Buffer.from(response.data, "binary").toString("base64");
+        data = response.data;
+        console.log(response.data);
+        setIsLoading(false);
+      });
 
     // axios
     //   .get("http://localhost:5000/results").then(response => {
@@ -52,14 +62,6 @@ export default function Uploader() {
     //     console.log(response.data == null)
     //     console.log(base64.encode(response.data))
     // }).catch(err => console.log(err));
-
-    axios
-      .get("http://localhost:5000/results", {
-        responseType: "arraybuffer",
-      })
-      .then((response) =>
-        Buffer.from(response.data, "binary").toString("base64")
-      );
   };
 
   return (
@@ -78,27 +80,28 @@ export default function Uploader() {
             Select Image
           </label>
         </div>
-        <div className="img-container">
-          <label>
-            {fileList &&
-              fileList.map((file, index) => {
-                return <p>image-{index + 1 + " : " + file.name}</p>;
-              })}
-          </label>
+        <div className="container">
+          <div className="img-container">
+            <label>
+              {fileList &&
+                fileList.map((file, index) => {
+                  return <p>image-{index + 1 + " : " + file.name}</p>;
+                })}
+            </label>
+          </div>
+          <div className="img-container">
+            {isLoading ? <LoadingSpinner /> : <ImageContainer data = {data}/>}
+          </div>
         </div>
       </form>
       <div className="results">
         <button className="button" type="submit" onClick={onSubmitHandler}>
           Upload
         </button>
-        <button className="button" style={{ margin: "auto" }} onClick={getResult}>
+        <button className="button" onClick={getResult} disabled={isLoading}>
           Get Results
         </button>
       </div>
     </>
   );
 }
-
-// {imageURLs.map((imageSRC) => (
-//   <img className="img-size" alt={imageSRC} src={imageSRC} />
-// ))}
