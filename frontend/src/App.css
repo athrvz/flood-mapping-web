@@ -36,17 +36,29 @@
   margin: auto;
 }
 
+.container{
+  margin: auto;
+  display: flex;
+  width: 80%
+}
+
 .btn-container{
   display: flex;
   justify-content: space-around;
 }
 
+.result-image{
+
+  margin: auto;
+  width: 50%;
+}
+
 .img-container{
   padding: 1em;
-  margin: 2em auto;
+  margin: 1em;
   display: flex;
   flex-direction: column;
-  height: 200px;
+  height: 250px;
   width: 50%;
   border: 1px dashed rgb(37, 37, 37);
   border-radius: 10px;
