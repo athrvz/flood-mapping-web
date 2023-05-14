@@ -27,9 +27,10 @@
 }
 
 .results {
-  width: 100%;
+  width: 80%;
   display: flex;
   justify-content: center;
+  margin: auto;
 }
 
 .results button {
@@ -45,12 +46,13 @@
 .btn-container{
   display: flex;
   justify-content: space-around;
+  margin: 1em;
 }
 
 .result-image{
-
+  width: 150px;
+  height: 150px;
   margin: auto;
-  width: 50%;
 }
 
 .img-container{

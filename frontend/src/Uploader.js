@@ -4,6 +4,8 @@ import LoadingSpinner from "./spinner";
 import axios from "axios";
 import ImageContainer from "./ImageContainer";
 
+let data;
+
 export default function Uploader() {
   const [fileList, setFileList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +51,8 @@ export default function Uploader() {
       })
       .then((response) => {
         Buffer.from(response.data, "binary").toString("base64");
-        console.log(response);
+        data = response.data;
+        console.log(response.data);
         setIsLoading(false);
       });
 
@@ -87,7 +90,7 @@ export default function Uploader() {
             </label>
           </div>
           <div className="img-container">
-            {isLoading ? <LoadingSpinner /> : <ImageContainer />}
+            {isLoading ? <LoadingSpinner /> : <ImageContainer data = {data}/>}
           </div>
         </div>
       </form>
