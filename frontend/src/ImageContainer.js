@@ -5,7 +5,15 @@ import img from "../src/asset/icon.jpeg";
 const ImageContainer = (data) => {
   return (
     <>
-      <img className="result-image" src={data ? img : `data:image/png;base64,${data}`} alt="secret" />
+      {data.data ? (
+        <img
+          className="result-image"
+          src={`data:image/png;base64,${data.data}`}
+          alt="secret"
+        />
+      ) : (
+        <img className="result-image" src={img} alt="secret" />
+      )}
     </>
   );
 };
