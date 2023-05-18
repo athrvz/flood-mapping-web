@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import "./App.css";
 import LoadingSpinner from "./spinner";
 import axios from "axios";
-import ImageContainer from "./ImageContainer";
-
-let data;
 
 export default function Uploader() {
   const [fileList, setFileList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [image, setImage] = useState(null);
 
   const onImageChange = (e) => {
     setFileList(Array.prototype.slice.call(e.target.files));
@@ -45,23 +43,18 @@ export default function Uploader() {
     e.preventDefault();
     setIsLoading(true);
 
-    axios
-      .get("http://localhost:5000/results", {
-        responseType: "arraybuffer",
-      })
-      .then((response) => {
-        Buffer.from(response.data, "binary").toString("base64");
-        data = response.data;
-        console.log(response.data);
-        setIsLoading(false);
-      });
-
-    // axios
-    //   .get("http://localhost:5000/results").then(response => {
-    //     console.log(response.data);
-    //     console.log(response.data == null)
-    //     console.log(base64.encode(response.data))
-    // }).catch(err => console.log(err));
+    axios.get('http://localhost:5000/results', {
+      responseType: 'arraybuffer'
+    })
+    .then(response => {
+      const blob = new Blob([response.data], { type: 'image/png' });
+      const imageUrl = URL.createObjectURL(blob);
+      setImage(imageUrl);
+      setIsLoading(false);
+    })
+    .catch(error => {
+      console.log(error);
+    });
   };
 
   return (
@@ -90,7 +83,8 @@ export default function Uploader() {
             </label>
           </div>
           <div className="img-container">
-            {isLoading ? <LoadingSpinner /> : <ImageContainer data = {data}/>}
+            {/* {isLoading && image ? <LoadingSpinner /> : <ImageContainer data={image} />} */}
+            {image ? <img className="result-image" src={image} alt="png" /> :<LoadingSpinner /> }
           </div>
         </div>
       </form>
