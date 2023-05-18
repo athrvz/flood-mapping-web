@@ -7,7 +7,7 @@
   box-sizing: border-box;
   border-color: rgba(0, 0, 0, 0.15);
   box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-  margin-bottom: 10vh;
+  margin-bottom: 3vh;
   font-size: 16px;
   color: rgb(75, 69, 193);
   font-weight: 600;
@@ -40,7 +40,9 @@
 .container{
   margin: auto;
   display: flex;
-  width: 80%
+  flex-direction: column;
+  align-items: center;
+  width: 100%
 }
 
 .btn-container{
@@ -50,9 +52,9 @@
 }
 
 .result-image{
-  width: 150px;
-  height: 150px;
+  width: 1000px;
   margin: auto;
+  margin-left: -50px;
 }
 
 .img-container{

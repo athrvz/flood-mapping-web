@@ -20,7 +20,6 @@ export default function Uploader() {
     Object.keys(fileList).forEach((file, i) => {
       data.append(`image${i + 1}`, fileList[i], fileList[i].name);
     });
-
     axios({
       method: "post",
       url: "http://localhost:5000/upload",
@@ -29,18 +28,20 @@ export default function Uploader() {
         "Content-Type": "multipart/form-data",
       },
     })
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.errors) {
-          alert(data.errors);
-        } else {
-          console.log(data);
-        }
-      });
+    // .then((resp) => resp.json())
+    .then((data) => {
+      if (data.errors) {
+        alert(data.errors);
+      } else {
+        console.log(data);
+        alert(data.data.message);
+      }
+    });
   };
-
+  
   const getResult = (e) => {
     e.preventDefault();
+    setImage(null);
     setIsLoading(true);
 
     axios.get('http://localhost:5000/results', {
