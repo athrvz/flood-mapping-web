@@ -35,6 +35,9 @@ def get_results():
 
 @app.route("/upload", methods = ["POST"])
 def upload_img():
+    
+    # Clear previous images
+    subprocess.call(['python', '.\\delete_img.py'])
     # check if file present
     if len(request.files) != 2:
         return make_response(jsonify({"error": "Invalid request"}), 400)
